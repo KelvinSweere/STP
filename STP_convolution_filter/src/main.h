@@ -22,6 +22,7 @@
 #define M 			 63		//grootte van buffer
 #define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
 
+
 // Zodat het in keys_int.c gebruikt kan worden
 extern int h[];
 extern volatile float fc;
