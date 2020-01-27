@@ -50,6 +50,7 @@
 "libs/leds.o"
 "libs/pwm.o"
 "libs/uart.o"
+"src/convolution.o"
 "src/main.o"
 "src/syscalls.o"
 "src/system_stm32f4xx.o"

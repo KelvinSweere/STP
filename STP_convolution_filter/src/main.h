@@ -19,9 +19,8 @@
 #define		KEYS_INT	1
 
 // DEFINES DIE WE NODIG HEBBEN
-#define M 			 124		//grootte van buffer
+#define M 			 63		//grootte van buffer
 #define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
-#define fs			 40000
 
 // Zodat het in keys_int.c gebruikt kan worden
 extern int h[];
@@ -32,6 +31,7 @@ extern volatile int deler;
 // Zodat het nieuwe kernel berekend kan worden in keys_int.c
 void generate_kernel(void);
 void timing_pin_init(void);
+void MicroInit(void);
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_conf.h"
@@ -43,6 +43,7 @@ void timing_pin_init(void);
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#include "convolution.h"
 
 #if AD
 #define	TIMER 1

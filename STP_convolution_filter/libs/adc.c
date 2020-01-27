@@ -17,7 +17,9 @@ To use the DAC channel 1 or 2 use the following initialize:
 */
 
 #include "main.h"
+
 #if AD
+
 void ADC_init(int Channel)
 /* ADC Initialize
  * Use this function to initialize the ADC channel 1 or 2.
@@ -75,19 +77,19 @@ void ADC_init(int Channel)
 	}
 }
 
-uint16_t Get_ADC_Value(int Channel)
 /* ADC Get Value
  * Use this function fetch the value of ADC channel 1 or 2.
  * Return is an 16 bit integer with the 12 bit ADC value
  * Shifted 4 spaces to get the right value
  * (Left aligned LSB filled with zeros)
  */
+uint16_t Get_ADC_Value(int Channel)
 {
 	if (Channel == 1)
 	{
-		ADC_SoftwareStartConv(ADC2);
-		while(ADC_GetSoftwareStartConvStatus(ADC2) != RESET);
-		return (ADC_GetConversionValue(ADC2) >> 4);
+		ADC_SoftwareStartConv(ADC2);							/* Enable conversion of real value to software value 	*/
+		while(ADC_GetSoftwareStartConvStatus(ADC2) != RESET);	/* Check if ADC-value software conversion is ready	 	*/
+		return (ADC_GetConversionValue(ADC2) >> 4);				/* Get and return value from ADC 						*/
 	}
 	else
 	{
@@ -96,4 +98,5 @@ uint16_t Get_ADC_Value(int Channel)
 		return (ADC_GetConversionValue(ADC3) >> 4);
 	}
 }
+
 #endif

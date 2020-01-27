@@ -15,7 +15,7 @@ startup/%.o: ../startup/%.s
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Assembler'
 	@echo $(PWD)
-	arm-none-eabi-as -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -I"C:/Users/Neki_/workspace/STP_convolution_filter/StdPeriph_Driver/inc" -I"C:/Users/Neki_/workspace/STP_convolution_filter/inc" -I"C:/Users/Neki_/workspace/STP_convolution_filter/CMSIS/device" -I"C:/Users/Neki_/workspace/STP_convolution_filter/CMSIS/core" -g -o "$@" "$<"
+	arm-none-eabi-as -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -I"C:/Users/Neki_/Documents/School Git/STP/STP_convolution_filter/StdPeriph_Driver/inc" -I"C:/Users/Neki_/Documents/School Git/STP/STP_convolution_filter/inc" -I"C:/Users/Neki_/Documents/School Git/STP/STP_convolution_filter/CMSIS/device" -I"C:/Users/Neki_/Documents/School Git/STP/STP_convolution_filter/CMSIS/core" -g -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

@@ -139,11 +139,11 @@ void EXTI0_IRQHandler(void)
 		//Print fc in Hz
 		LCD_XY(0,1);
 		LCD_put("fc = ");
-		LCD_putint(((int)(fc*fs)));
+		LCD_putint(((int)(fc*F_SAMPLE)));
 		LCD_put(" Hz");
 
 		bepaal_deler();	//bepaal welke deler nodig is voor het convolutiefilter
-		generate_kernel();
+		ConvGenerateKernel();
 
 		for(i=0; i<M; i++)
 			x[i] = 0;

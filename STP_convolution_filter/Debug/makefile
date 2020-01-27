@@ -32,10 +32,10 @@ endif
 all: STP_convolution_filter.elf
 
 # Tool invocations
-STP_convolution_filter.elf: $(OBJS) $(USER_OBJS) C:\Users\Neki_\workspace\STP_convolution_filter/LinkerScript.ld
+STP_convolution_filter.elf: $(OBJS) $(USER_OBJS) C:\Users\Neki_\Documents\School\ Git\STP\STP_convolution_filter/LinkerScript.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T"C:/Users/Neki_/workspace/STP_convolution_filter/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "STP_convolution_filter.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T"C:/Users/Neki_/Documents/School Git/STP/STP_convolution_filter/LinkerScript.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "STP_convolution_filter.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
