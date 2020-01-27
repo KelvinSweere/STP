@@ -19,8 +19,10 @@
 #define		KEYS_INT	1
 
 // DEFINES DIE WE NODIG HEBBEN
-#define M 			 124		//grootte van buffer
-#define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
+//#define M 			 124	//grootte van buffer.
+#define M 			 63
+
+#define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints.
 #define fs			 40000
 
 // Zodat het in keys_int.c gebruikt kan worden
