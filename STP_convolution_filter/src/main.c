@@ -35,6 +35,7 @@ int main(void)
 	ConvPrintVal();
 
 	ConvInterruptInit();	/* Initialize and start convolution timer interrupt				*/
+	timing_pin_init();
 
 //	UART_printf(256, "Init's zijn succesvol uitgevoerd \r\n\r\n\r\n\r\n\r\n");
 //	DELAY_ms(1000);

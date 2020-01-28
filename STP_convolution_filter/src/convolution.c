@@ -43,7 +43,7 @@ void TIM3_IRQHandler(void)
  */
 void ConvCalc(void)
 {
-	//GPIO_SetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie begint
+	GPIO_SetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie begint
 	y = 0;
 
 	// ! TODO: checken of ook een uint16_t datatype gebruikt kan worden.
@@ -62,7 +62,7 @@ void ConvCalc(void)
 	DAC_SetChannel1Data(DAC_Align_12b_R, y);	/* Send the y-value to the DAC												*/
 	//UART_printf(256, "%d \r\n", y);
 
-	//GPIO_ResetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie klaar is
+	GPIO_ResetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie klaar is
 }
 
 /**
