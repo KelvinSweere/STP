@@ -32,11 +32,7 @@ The interrupt handler called is TIM3_IRQHandler
 #define Channel_1	1
 #define Channel_2	2
 
-//extern volatile y,i,tel;
-//extern volatile int x[];	// buffer
-
 /****************Function Prototypes********************/
-extern volatile int x[];	// buffer
 
 void DAC_init(int Channel);
 void conv_INT_init(void);

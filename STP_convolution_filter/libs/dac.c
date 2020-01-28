@@ -1,5 +1,4 @@
 #include "main.h"
-#if DA
 
 void DAC_init(int Channel)
 {
@@ -35,4 +34,3 @@ void DAC_init(int Channel)
 	}
 }
 
-#endif

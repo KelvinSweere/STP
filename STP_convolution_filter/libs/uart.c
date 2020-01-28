@@ -26,7 +26,6 @@ In the interrupt routine the char is send back to the terminal
 */
 
 #include "main.h"
-#if UART
 
 /****************Globals********************************/
 char string[100];
@@ -160,4 +159,3 @@ signed int UART_printf(size_t length, const char *pFormat, ...)
 
     return rc;
 }
-#endif

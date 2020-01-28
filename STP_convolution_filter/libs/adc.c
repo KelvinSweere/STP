@@ -18,8 +18,6 @@ To use the DAC channel 1 or 2 use the following initialize:
 
 #include "main.h"
 
-#if AD
-
 void ADC_init(int Channel)
 /* ADC Initialize
  * Use this function to initialize the ADC channel 1 or 2.
@@ -98,5 +96,3 @@ uint16_t Get_ADC_Value(int Channel)
 		return (ADC_GetConversionValue(ADC3) >> 4);
 	}
 }
-
-#endif
