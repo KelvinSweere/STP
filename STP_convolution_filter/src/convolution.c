@@ -1,5 +1,8 @@
 #include "main.h"
 
+/**
+ * @brief initaliseer de timer interupt voor convolutie.
+ */
 void ConvInterruptInit(void)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -35,10 +38,15 @@ void TIM3_IRQHandler(void)
 	}
 }
 
+/**
+ * @brief bereken de convolutie en stuur deze uit naar een DAC.
+ */
 void ConvCalc(void)
 {
 	GPIO_SetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie begint
 	y = 0;
+
+	// ! TODO: checken of ook een uint16_t datatype gebruikt kan worden.
 
 	/* Shifting of all values in the buffer and convolute (M-1) multiplications */
 	for(i=0; i<M; i++)
@@ -57,6 +65,9 @@ void ConvCalc(void)
 	GPIO_ResetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie klaar is
 }
 
+/**
+ * @brief print de cutoff frequentie van de kantelfrequentie op het LCD scherm.
+ */
 void ConvPrintVal(void)
 {
 	LCD_clear();
@@ -76,6 +87,9 @@ void ConvPrintVal(void)
 	LCD_put(" Hz");
 }
 
+/**
+ * @brief Genereer een kernel waarop de convolutie op wordt uitgevoerd.
+ */
 void ConvGenerateKernel(void)
 {
 	int   i = 0;
