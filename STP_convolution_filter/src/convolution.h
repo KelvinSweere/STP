@@ -1,10 +1,14 @@
 #ifndef CONVOLUTION_H_
 #define CONVOLUTION_H_
 
+// Debug output defines
+//#define KERNEL_FOR_EXCEL	// Om een kernel voor excel te genereren (om kernel te kunnen plotten in een diagram)
+//#define KERNEL_DEBUG		// Stuurt debug output naar de terminal
+
 #define F_SAMPLE 40000
 
 volatile int  i,tel;
-volatile long y;
+volatile int  y;
 volatile int  x[M+1];	// buffer
 
 void TIM3_IRQHandler(void);

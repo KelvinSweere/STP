@@ -142,7 +142,9 @@ void EXTI0_IRQHandler(void)
 		LCD_putint(((int)(fc*F_SAMPLE)));
 		LCD_put(" Hz");
 
-		bepaal_deler();	//bepaal welke deler nodig is voor het convolutiefilter
+		//bepaal_deler();	//bepaal welke deler nodig is voor het convolutiefilter
+		deler = (int)((1+fc) * H_MULTIPLIER);
+		UART_printf(256, "fc: %f \t deler: %d \r\n", fc, deler);
 		ConvGenerateKernel();
 
 		for(i=0; i<M; i++)

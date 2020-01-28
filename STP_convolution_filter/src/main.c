@@ -12,14 +12,10 @@
 #include "stm32f4xx.h"
 #include "main.h"
 
-// Debug output defines
-//#define KERNEL_FOR_EXCEL	// Om een kernel voor excel te genereren (om kernel te kunnen plotten in een diagram)
-#define KERNEL_DEBUG		// Stuurt debug output naar de terminal
-
-volatile float fc = 0.1;		//Cutoff frequentie
+volatile float fc = 0.05;		//Cutoff frequentie
 volatile float h_temp[M+1];		//Windowed sinc kernel array
 int   h[M+1];
-volatile int   deler = 130000;
+volatile int   deler = 100000;
 
 int main(void)
 {
@@ -31,8 +27,11 @@ int main(void)
 	SystemInit();			/* Set system clock to 168 MHz 									*/
 	MicroInit();			/* Initialize all peripherals needed from the microcontroller	*/
 
+	timing_pin_init();
 	ConvGenerateKernel();
 	ConvPrintVal();
+
+	UART_printf(256, "\r\n\r\nMicrocontroller init succecful! \r\n\r\n");
 
 	ConvInterruptInit();	/* Initialize and start convolution timer interrupt				*/
 
