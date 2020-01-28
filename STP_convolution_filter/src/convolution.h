@@ -1,7 +1,7 @@
 /*
  * Version:
- * 		1.00:
- * 			Defines M en H_MULTIPLIER toegevoegd.
+ * 		1.01:
+ * 			Shiften van waarden in de x-buffer gefixt.
  */
 
 
@@ -15,7 +15,7 @@
 #define F_SAMPLE 40000
 // DEFINES DIE WE NODIG HEBBEN
 // 64 Tabs is getest op 28-1-2020, de tijd die convolutie erover doet is 24,9 us.
-#define M 			 64			//grootte van buffer
+#define M 			 63			//grootte van buffer
 #define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
 
 volatile int  i,tel;

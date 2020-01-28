@@ -51,7 +51,7 @@ void ConvCalc(void)
 	/* Shifting of all values in the buffer and convolute (M-1) multiplications */
 	for(i=0; i<M; i++)
 	{
-		x[M-i-1] = x[M-i];		/* Shift values				*/
+		x[i] = x[i+1];			/* Shift values				*/
 		y += h[M-i] * x[i];		/* Multiply and accumulate	*/
 	}
 
