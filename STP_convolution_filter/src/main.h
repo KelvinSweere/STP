@@ -3,6 +3,11 @@
  *
  *  Created on: 27 jan. 2020
  *      Author: Neki_
+*   Version:
+*   	1.00:
+*   		#defines van de code samengevoegd in main.h en convolution.h
+*   	1.01:
+*   		Defines die gaan over convolutie toegevoegd aan convolution.h.
  */
 
 #ifndef MAIN_H_
@@ -17,10 +22,6 @@
 #define		LCD			1
 #define		DELAY		1
 #define		KEYS_INT	1
-
-// DEFINES DIE WE NODIG HEBBEN
-#define M 			 63		//grootte van buffer
-#define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
 
 
 // Zodat het in keys_int.c gebruikt kan worden
