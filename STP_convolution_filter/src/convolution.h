@@ -16,11 +16,16 @@
 // DEFINES DIE WE NODIG HEBBEN
 // 64 Tabs is getest op 28-1-2020, de tijd die convolutie erover doet is 24,9 us.
 #define M 			 63			//grootte van buffer
-#define H_MULTIPLIER 100000		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
+#define H_MULTIPLIER 1024		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
 
 volatile int  i,tel;
 volatile int  y;
 volatile int  x[M+1];	// buffer
+
+extern int h[];
+extern volatile float fc;
+extern volatile float h_temp[];
+extern volatile int deler;
 
 void TIM3_IRQHandler(void);
 void ConvInterruptInit(void);
