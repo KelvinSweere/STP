@@ -375,7 +375,7 @@
  #if defined(USE_HSE_BYPASS)
   #define PLL_M      8    
  #else /* !USE_HSE_BYPASS */
-  #define PLL_M      16
+  #define PLL_M      8
  #endif /* USE_HSE_BYPASS */
 #else
 #endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx || STM32F469_479xx */  
@@ -522,7 +522,7 @@ void SystemInit(void)
 }
 
 /**
-   * @brief  Update SystemCoreClock variable according to Clock Register Values.
+  * @brief  Update SystemCoreClock variable according to Clock Register Values.
   *         The SystemCoreClock variable contains the core clock (HCLK), it can
   *         be used by the user application to setup the SysTick timer or configure
   *         other parameters.

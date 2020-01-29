@@ -34,6 +34,7 @@ void TIM3_IRQHandler(void)
 	{
 		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 
+		//GPIO_ToggleBits(GPIOD, GPIO_Pin_12);
 		ConvCalc();
 	}
 }
@@ -43,26 +44,37 @@ void TIM3_IRQHandler(void)
  */
 void ConvCalc(void)
 {
-	GPIO_SetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie begint
 	y = 0;
+	k = j;
 
-	// ! TODO: checken of ook een uint16_t datatype gebruikt kan worden.
+	//GPIO_SetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie begint
 
 	/* Shifting of all values in the buffer and convolute (M-1) multiplications */
-	for(i=0; i<M; i++)
+	for(i=0, bcnt=0; i<M; i++, bcnt++)
 	{
-		x[i] = x[i+1];			/* Shift values				*/
-		y += h[M-i] * x[i];		/* Multiply and accumulate	*/
+		if((bcnt+k) == M)
+		{
+			bcnt = 0;
+			k = 0;
+		}
+
+		//x[i] = x[i+1];			/* Shift values				*/
+		y += h[M-i] * x[bcnt+k];		/* Multiply and accumulate	*/
 	}
 
-	x[M] = Get_ADC_Value(1) - 2047;	/* Take a new sample						*/
-	y += h[0] * x[M];			/* Multiply and accumulate with new value	*/
+	//GPIO_ResetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie klaar is
 
-	y = (y / 2112) + 2047;								/* Use a divider to bring y back to a range between 0 en 4095 for the DAC	*/
-	DAC_SetChannel1Data(DAC_Align_12b_R, y);	/* Send the y-value to the DAC												*/
-	//UART_printf(256, "%d \r\n", y);
+	x[j] = Get_ADC_Value(1) - 2047;	/* Take a new sample						*/
+	y += h[0] * x[j];				/* Multiply and accumulate with new value	*/
 
-	GPIO_ResetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie klaar is
+	//2112
+	y = (y / 2112) + 2047;						/* Use a divider to bring y back to a range between 0 en 4095 for the DAC	*/
+	DAC_SetChannel1Data(DAC_Align_12b_R, y);	/* Send the y-value to the DAC		*/
+
+	if(j == M)
+		j=0;
+	else
+		j++;
 }
 
 /**
@@ -93,7 +105,7 @@ void ConvPrintVal(void)
 void ConvGenerateKernel(void)
 {
 	int   i = 0;
-	float K;				/* K is a gain value that decides the attenuation	*/
+	float K = 0;			/* K is a gain value that decides the attenuation	*/
 	float blackman[M+1];	/* blackman window array							*/
 	float sinc[M+1];		/* Sinc window array								*/
 
@@ -135,7 +147,7 @@ void ConvGenerateKernel(void)
 		K += h_temp[i];
 	K = 1 / K;
 
-	//UART_printf(256, "K gain: %f \r\n", K);
+	UART_printf(256, "K gain: %f \r\n", K);
 
 	/* Multiply the gain with the temporary kernel h_temp to get the final kernel values
 	 * The H_MULTIPLIER is used to turn the float values into integers						*/
@@ -153,8 +165,5 @@ void ConvGenerateKernel(void)
 		#ifdef KERNEL_FOR_EXCEL
 			UART_printf(256, "%f \r\n", h_temp[i]);
 		#endif
-
-
 	}
-
 }

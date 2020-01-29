@@ -15,12 +15,13 @@
 #define F_SAMPLE 40000
 // DEFINES DIE WE NODIG HEBBEN
 // 64 Tabs is getest op 28-1-2020, de tijd die convolutie erover doet is 24,9 us.
-#define M 			 63			//grootte van buffer
+#define M 			 110		//grootte van buffer
 #define H_MULTIPLIER 1024		//Getal waarmee kernel in floats wordt gescaled naar een kernel met ints
 
-volatile int  i,tel;
+volatile int  i,j,k;
+volatile int  bcnt;
 volatile int  y;
-volatile int  x[M+1];	// buffer
+volatile int  x[M];	// buffer
 
 extern int h[];
 extern volatile float fc;

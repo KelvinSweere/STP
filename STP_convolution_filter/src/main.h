@@ -21,6 +21,7 @@ void MicroInit(void);
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#include <string.h>
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_conf.h"

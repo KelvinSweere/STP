@@ -12,10 +12,11 @@
 #include "stm32f4xx.h"
 #include "main.h"
 
-volatile float fc = 0.05;		//Cutoff frequentie
+extern uint32_t G_CLK;
+
+volatile float fc = 0.075;		//Cutoff frequentie
 volatile float h_temp[M+1];		//Windowed sinc kernel array
 int   h[M+1];
-volatile int   deler = 100000;
 
 int main(void)
 {
@@ -24,14 +25,19 @@ int main(void)
 	GPIOD -> MODER |= ( 1 << 26 );
 	GPIOD -> MODER |= ( 1 << 30 );
 
-	SystemInit();			/* Set system clock to 168 MHz 									*/
+	static int set = 1;		/* reset identifier																*/
+	SystemInit();			/* Set system clock to 168 MHz 													*/
+	set++;					/* if this value is > 1 you have made a serious pointer error, reset happened	*/
+
 	MicroInit();			/* Initialize all peripherals needed from the microcontroller	*/
 
 	timing_pin_init();
 	ConvGenerateKernel();
 	ConvPrintVal();
 
-	UART_printf(256, "\r\n\r\nMicrocontroller init succecful! \r\n\r\n");
+	UART_printf(256, "\r\n\r\nMicrocontroller init succecful! \r\n");
+	UART_printf(256, "Running on: %d MHz! \r\n\r\n", G_CLK/1000000);
+
 
 	ConvInterruptInit();	/* Initialize and start convolution timer interrupt				*/
 	timing_pin_init();

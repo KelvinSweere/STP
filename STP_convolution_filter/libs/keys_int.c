@@ -100,7 +100,7 @@ void EXTI0_IRQHandler(void)
 {
 	if(EXTI_GetITStatus(EXTI_Line0) != RESET)
 	{
-		__asm("CPSID   I"); 			/* disable interrupts 								*/
+		TIM_Cmd(TIM3, DISABLE); 			/* disable interrupts 								*/
 
 		GPIO_ResetBits(GPIOD, KEY_ROW);	/* Reset all rows so KEYS_read can start reading	*/
 		G_KEY = KEYS_read();			/* Read the pressed key								*/
@@ -122,8 +122,8 @@ void EXTI0_IRQHandler(void)
 		}
 
 		/* Prevent fc value getting to high / to low */
-		if(fc <= 0.05)			fc = 0.05;
-		else if(fc >= 0.375)	fc = 0.375;
+		if(fc <= (10.0 / F_SAMPLE))			fc = (float)(10.0 / F_SAMPLE);
+		else if(fc >= (15000.0 / F_SAMPLE))	fc = (float)(15000.0 / F_SAMPLE);
 
 		ConvPrintVal();			/* Print cuttof frequency on LCD */
 		ConvGenerateKernel();	/* Generate new kernel			 */
@@ -135,7 +135,7 @@ void EXTI0_IRQHandler(void)
 		GPIO_SetBits(GPIOD, KEY_ROW);		/* Make the ROW high, so we can wait for an interrupt	*/
 		EXTI_ClearITPendingBit(EXTI_Line0);	/* Clear the interrupt bit								*/
 
-		__asm("CPSIE   I"); // enable interrupts
+		TIM_Cmd(TIM3, ENABLE);	/* enable interrupts */
 	}
 }
 
