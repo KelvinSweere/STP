@@ -1,5 +1,9 @@
 #include "main.h"
 
+volatile float fc = (1000.0 / F_SAMPLE);		//Cutoff frequentie
+volatile float h_temp[M+1];					//Windowed sinc kernel array
+int   h[M+1];
+
 /**
  * @brief initaliseer de timer interupt voor convolutie.
  */
@@ -46,8 +50,6 @@ void ConvCalc(void)
 	GPIO_SetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie begint
 	y = 0;
 
-	// ! TODO: checken of ook een uint16_t datatype gebruikt kan worden.
-
 	/* Shifting of all values in the buffer and convolute (M-1) multiplications */
 	for(i=0; i<M; i++)
 	{
@@ -58,8 +60,8 @@ void ConvCalc(void)
 	x[M] = Get_ADC_Value(1) - 2047;	/* Take a new sample						*/
 	y += h[0] * x[M];			/* Multiply and accumulate with new value	*/
 
-	y = (y / 2112) + 2047;								/* Use a divider to bring y back to a range between 0 en 4095 for the DAC	*/
-	DAC_SetChannel1Data(DAC_Align_12b_R, y);	/* Send the y-value to the DAC												*/
+	y /= 1056;								/* Use a divider to bring y back to a range between 0 en 4095 for the DAC	*/
+	DAC_SetChannel1Data(DAC_Align_12b_R, y + 2047);	/* Send the y-value to the DAC												*/
 	//UART_printf(256, "%d \r\n", y);
 
 	GPIO_ResetBits(GPIOD, GPIO_Pin_12); // Zet pin hoog als indicatie wanneer convolutie klaar is
@@ -90,12 +92,13 @@ void ConvPrintVal(void)
 /**
  * @brief Genereer een kernel waarop de convolutie op wordt uitgevoerd.
  */
-void ConvGenerateKernel(void)
+void ConvGenerateKernel(float cuttof)
 {
 	int   i = 0;
-	float K;				/* K is a gain value that decides the attenuation	*/
 	float blackman[M+1];	/* blackman window array							*/
 	float sinc[M+1];		/* Sinc window array								*/
+
+	K = 0;
 
 	/* Clear all arrays */
 	for(i=0; i<(M+1); i++)
@@ -103,7 +106,10 @@ void ConvGenerateKernel(void)
 		blackman[i] = 0;
 		sinc[i] = 0;
 		h[i] = 0;
+		h_temp[i] = 0;
 	}
+
+	UART_printf(256, "cuttof frequency: %f \r\n", cuttof);
 
 	/* Calculation of the kernel */
 	for(i=0; i<(M+1); i++)
@@ -113,14 +119,16 @@ void ConvGenerateKernel(void)
 		 * i - (M/2) = 0. A division by zero is not possible.								*/
 		if(i == (M/2))
 		{
-			sinc[i] = 2 * M_PI * fc;
+			sinc[i] = 2 * M_PI * cuttof;
 		}
 		else
 		{
 			blackman[i] = 0.42 - (0.5 * cos((2*M_PI*i) / M)) + (0.08 * cos((4*M_PI*i) / M));	/* Calculate point in the blackman window 	*/
-			sinc[i]     = sin((2*M_PI*fc) * (i-(M/2))) / (i-(M/2));								/* Calculate point in the sinc array		*/
+			sinc[i]     = sin((2*M_PI*cuttof) * (i-(M/2))) / (i-(M/2));							/* Calculate point in the sinc array		*/
 			h_temp[i]   = sinc[i] * blackman[i];												/* Calculate point in the kernel array		*/
 		}
+
+		K += h_temp[i];	/* Calculate the final gain (this will decide the level of attenuation) */
 
 		//UART_printf(256, "blackman[%d] = %f \t sinc[%d] = %f \t h_temp[%d] = %f \t i-(M/2) = %d \r\n", i, blackman[i], i, sinc[i], i, h_temp[i], (i-(M/2)));
 
@@ -130,10 +138,7 @@ void ConvGenerateKernel(void)
 		//UART_printf(256, "%f \r\n", h_temp[i]);
 	}
 
-	/* Calculate the final gain (this will decide the level of attenuation) */
-	for(i=0; i<(M+1); i++)
-		K += h_temp[i];
-	K = 1 / K;
+
 
 	//UART_printf(256, "K gain: %f \r\n", K);
 
@@ -141,9 +146,7 @@ void ConvGenerateKernel(void)
 	 * The H_MULTIPLIER is used to turn the float values into integers						*/
 	for(i=0; i<(M+1); i++)
 	{
-		h_temp[i] = (K * h_temp[i]) * H_MULTIPLIER;		/* Multiply by the gain 					*/
-		h[i] = (int)(h_temp[i]);						/* Change float to int and apply division 	*/
-
+		h[i] = (int)((h_temp[i] / K) * H_MULTIPLIER);		/* Change float to int and apply division 	*/
 
 		/* Kernel calculation debugging */
 		#ifdef KERNEL_DEBUG

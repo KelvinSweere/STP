@@ -12,11 +12,6 @@
 #include "stm32f4xx.h"
 #include "main.h"
 
-volatile float fc = 0.05;		//Cutoff frequentie
-volatile float h_temp[M+1];		//Windowed sinc kernel array
-int   h[M+1];
-volatile int   deler = 100000;
-
 int main(void)
 {
 	/* Configure peripheral clock for system clock */
@@ -28,10 +23,10 @@ int main(void)
 	MicroInit();			/* Initialize all peripherals needed from the microcontroller	*/
 
 	timing_pin_init();
-	ConvGenerateKernel();
+	ConvGenerateKernel(fc);
 	ConvPrintVal();
 
-	UART_printf(256, "\r\n\r\nMicrocontroller init succecful! \r\n\r\n");
+	UART_printf(256, "\r\n\r\nMicrocontroller init succecfull! \r\n\r\n");
 
 	ConvInterruptInit();	/* Initialize and start convolution timer interrupt				*/
 	timing_pin_init();

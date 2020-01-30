@@ -122,11 +122,11 @@ void EXTI0_IRQHandler(void)
 		}
 
 		/* Prevent fc value getting to high / to low */
-		if(fc <= 0.05)			fc = 0.05;
-		else if(fc >= 0.375)	fc = 0.375;
+		if(fc <= (1000.0 / F_SAMPLE))			fc = 1000.0 / F_SAMPLE;
+		else if(fc >= (15000.0 / F_SAMPLE))	fc = 15000.0 / F_SAMPLE;
 
 		ConvPrintVal();			/* Print cuttof frequency on LCD */
-		ConvGenerateKernel();	/* Generate new kernel			 */
+		ConvGenerateKernel(fc);	/* Generate new kernel			 */
 
 		/* Clear buffer */
 		for(i=0; i<M; i++)
